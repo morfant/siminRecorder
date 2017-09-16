@@ -4,7 +4,7 @@
 #include "ofxLibsndFileRecorder.h"
 
 //#define _VOICE_PATH_    "/Users/siminrecorder/Dropbox/voices/"
-#define _VOICE_PATH_    "/Users/giy/Desktop/siminTemp/"
+#define _VOICE_PATH_    "/Users/giy/Dropbox/"
 
 class ofApp : public ofBaseApp{
 
@@ -25,27 +25,27 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    void beginRecording();
-    void endRecording();
-    void audioIn(float * input, int bufferSize, int nChannels);
-    ofSoundStream soundStream;
-    
-    vector <float> left;
-    vector <float> right;
-    vector <float> volHistory;
-    
-    bool recording;
-    ofxLibsndFileRecorder audioRecorder;
-    
-    ofSerial serial;
-    char bytesReadString[2];
-    
-    ofSoundPlayer beginMessage;
-    ofSoundPlayer endMessage;
-    
-    string getFilename(bool newFile=true);
-    int numOfVoice;
-    string lasttime;
+        void beginRecording();
+        void endRecording();
+        void audioIn(float * input, int bufferSize, int nChannels);
+        ofSoundStream soundStream;
+        
+        vector <float> left;
+        vector <float> right;
+        vector <float> volHistory;
+        
+        bool recording;
+        ofxLibsndFileRecorder audioRecorder;
+        
+        ofSerial serial;
+        char bytesReadString[2];
+        
+        ofSoundPlayer beginMessage;
+        ofSoundPlayer endMessage;
+        
+        string getFilename(bool newFile=true);
+        int numOfVoice;
+        string lasttime;
 
 		
 };

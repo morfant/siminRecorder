@@ -2,10 +2,12 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
     ofBackground(54);
     
     soundStream.listDevices();
-    soundStream.setDeviceID(3);
+//    soundStream.setDeviceID(3);
+    soundStream.setDeviceID(0);
     
     int bufferSize = 512;
     
@@ -22,30 +24,31 @@ void ofApp::setup(){
     
     lasttime = "No one recorded yet.";
     
-    serial.listDevices();
-    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
-    serial.setup("tty.usbmodem1431", 9600);
-    memset(bytesReadString, 0, 2);
-    serial.flush();
+    
+//    serial.listDevices();
+//    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
+//    serial.setup("tty.usbmodem1431", 9600);
+//    memset(bytesReadString, 0, 2);
+//    serial.flush();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if (serial.available() > 0) {
-        char ch = serial.readByte();
-        
-        if(ch == 'b' && !recording)
-            beginRecording();
-        else if (ch == 'f' && recording)
-            endRecording();
-    }
+//    if (serial.available() > 0) {
+//        char ch = serial.readByte();
+//        
+//        if(ch == 'b' && !recording)
+//            beginRecording();
+//        else if (ch == 'f' && recording)
+//            endRecording();
+//    }
     
     if (recording && ofGetElapsedTimef() > 60.0)
         endRecording();
     
     ofDirectory dir(_VOICE_PATH_);
     dir.listDir();
-    numOfVoice = (int)dir.size();
+    numOfVoice = (int)dir.size() - 1;
 }
 
 //--------------------------------------------------------------
@@ -118,9 +121,9 @@ void ofApp::audioIn(float * input, int bufferSize, int nChannels){
     
     //lets go through each sample and calculate the root mean square which is a rough way to calculate volume
     for (int i = 0; i < bufferSize; i++){
-        left[i] = input[i];
-        //		left[i]		= input[i]*0.5;
-        //		right[i]	= input[i+1]*0.5;
+//        left[i] = input[i];
+        		left[i]		= input[i]*0.5;
+        		right[i]	= input[i+1]*0.5;
     }
     
     if(recording)
