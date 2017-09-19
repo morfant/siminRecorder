@@ -3,8 +3,8 @@
 #include "ofMain.h"
 #include "ofxLibsndFileRecorder.h"
 
-//#define _VOICE_PATH_    "/Users/siminrecorder/Dropbox/voices/"
-#define _VOICE_PATH_    "/Users/giy/Dropbox/"
+#define _VOICE_PATH_    "/Users/siminrecorder/Dropbox/voices/"
+//#define _VOICE_PATH_    "/Users/giy/Dropbox/"
 
 class ofApp : public ofBaseApp{
 
@@ -26,6 +26,7 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
         void beginRecording();
+        void calling();
         void endRecording();
         void audioIn(float * input, int bufferSize, int nChannels);
         ofSoundStream soundStream;
@@ -35,17 +36,23 @@ class ofApp : public ofBaseApp{
         vector <float> volHistory;
         
         bool recording;
+        bool serialConnected;
         ofxLibsndFileRecorder audioRecorder;
         
         ofSerial serial;
         char bytesReadString[2];
         
         ofSoundPlayer beginMessage;
+        ofSoundPlayer callingMessage;
         ofSoundPlayer endMessage;
         
         string getFilename(bool newFile=true);
         int numOfVoice;
         string lasttime;
+        float wave_height = 0.0f;
+    float * ampedInput;
+    
+    float CALLING_INTERVAL = 60.0 * 10; // 10 min
 
 		
 };

@@ -5,9 +5,11 @@ void ofApp::setup(){
     
     ofBackground(54);
     
+    wave_height = 1.0f;
+    
     soundStream.listDevices();
-//    soundStream.setDeviceID(3);
-    soundStream.setDeviceID(0);
+    soundStream.setDeviceID(3);
+//    soundStream.setDeviceID(0);
     
     int bufferSize = 512;
     
@@ -20,28 +22,44 @@ void ofApp::setup(){
     recording=false;
     
     beginMessage.loadSound("beginningGuide.wav");
+    callingMessage.loadSound("callingGuide.wav");
     endMessage.loadSound("finishingGuide.wav");
     
     lasttime = "No one recorded yet.";
     
     
-//    serial.listDevices();
-//    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
-//    serial.setup("tty.usbmodem1431", 9600);
-//    memset(bytesReadString, 0, 2);
-//    serial.flush();
+    serial.listDevices();
+    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
+    if (serial.setup("tty.usbmodem1431", 9600)){
+        serialConnected = true;
+        memset(bytesReadString, 0, 2);
+        serial.flush();
+    } else {
+        serialConnected = false;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-//    if (serial.available() > 0) {
-//        char ch = serial.readByte();
-//        
-//        if(ch == 'b' && !recording)
-//            beginRecording();
-//        else if (ch == 'f' && recording)
-//            endRecording();
-//    }
+    if (serial.available() > 0) {
+        char ch = serial.readByte();
+        
+        if(ch == 'b' && !recording){
+//            cout << "b" << endl;
+            beginRecording();
+        }
+        
+        else if (ch == 'f' && recording){
+//            cout << "f" << endl;
+            endRecording();
+        }
+        
+    }
+
+    if (!recording && ofGetElapsedTimef() > CALLING_INTERVAL) {
+        calling();
+    }
+    
     
     if (recording && ofGetElapsedTimef() > 60.0)
         endRecording();
@@ -49,6 +67,8 @@ void ofApp::update(){
     ofDirectory dir(_VOICE_PATH_);
     dir.listDir();
     numOfVoice = (int)dir.size() - 1;
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -74,7 +94,7 @@ void ofApp::draw(){
     
     ofBeginShape();
     for (int i = 0; i < left.size(); i++){
-        ofVertex(i*2, 100 -left[i]*180.0f);
+        ofVertex(i, 100 -left[i]*180.0f);
     }
     ofEndShape(false);
     
@@ -97,14 +117,14 @@ void ofApp::draw(){
     
     ofBeginShape();
     for (int i = 0; i < right.size(); i++){
-        ofVertex(i*2, 100 -right[i]*180.0f);
+        ofVertex(i, 100 -right[i]*180.0f);
     }
     ofEndShape(false);
     
     ofPopMatrix();
     ofPopStyle();
     
-    ofDrawBitmapString(ofGetTimestampString("%Y-%m-%d %H:%m:%s"), 576, 50);
+    ofDrawBitmapString(ofGetTimestampString("%Y-%m-%d %H:%M:%S"), 576, 50);
     ofDrawBitmapString("We have "+ofToString(numOfVoice) + " voices", 576, 66);
     ofDrawBitmapString(lasttime, 576,82);
     
@@ -112,6 +132,12 @@ void ofApp::draw(){
         ofDrawBitmapString("Recording......ElapsedTime: "+ofToString(ofGetElapsedTimef()), 576,98);
     } else {
         ofDrawBitmapString("IDLE.", 576, 98);
+    }
+    
+    if (serialConnected) {
+        ofDrawBitmapString("tty.usbmodem1431 sucessfully connected.", 576, 120);
+    } else {
+        ofDrawBitmapString("serial connection failed.", 576, 120);
     }
 
 }
@@ -122,12 +148,22 @@ void ofApp::audioIn(float * input, int bufferSize, int nChannels){
     //lets go through each sample and calculate the root mean square which is a rough way to calculate volume
     for (int i = 0; i < bufferSize; i++){
 //        left[i] = input[i];
-        		left[i]		= input[i]*0.5;
-        		right[i]	= input[i+1]*0.5;
+        		left[i]		= input[i]*wave_height;
+        		right[i]	= input[i+1]*wave_height;
     }
     
+    
+    
+//    float ft = (*input) * input_volume;
+//    
+//    ampedInput = &ft;
+//    
+//    cout << *input << " / " << *ampedInput << endl;
+    
     if(recording)
+    {
         audioRecorder.addSamples(input, bufferSize*nChannels);
+    }
 }
 
 string ofApp::getFilename(bool newFile) {
@@ -156,10 +192,14 @@ string ofApp::getFilename(bool newFile) {
 //--------------------------------------------------------------
 void ofApp::beginRecording() {
     
+    if (callingMessage.isPlaying()){
+        callingMessage.stop();
+    }
+    
     static int audioCount = 0;
     
     beginMessage.play();
-    while(beginMessage.getIsPlaying());
+    while(beginMessage.isPlaying());
     
     string filename = getFilename();
     
@@ -169,6 +209,17 @@ void ofApp::beginRecording() {
     audioCount++;
     
     ofResetElapsedTimeCounter();
+}
+
+
+//--------------------------------------------------------------
+void ofApp::calling() {
+    
+    callingMessage.play();
+    ofResetElapsedTimeCounter();
+//    while(callingMessage.isPlaying());
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -183,10 +234,10 @@ void ofApp::endRecording() {
         audioRecorder.close();
         recording = false;
         
-        lasttime = "Latest voice is recorded in "+ofGetTimestampString("%Y-%m-%d %H:%m:%s");
+        lasttime = "Latest voice is recorded in "+ofGetTimestampString("%Y-%m-%d %H:%M:%S");
         
         endMessage.play();
-        while(endMessage.getIsPlaying());
+        while(endMessage.isPlaying());
     } else {
         cout << "quit recording\n";
         audioRecorder.close();
