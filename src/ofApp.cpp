@@ -5,8 +5,6 @@ void ofApp::setup(){
     
     ofBackground(54);
     
-    wave_height = 1.0f;
-    
     soundStream.listDevices();
     soundStream.setDeviceID(3);
 //    soundStream.setDeviceID(0);
@@ -93,8 +91,8 @@ void ofApp::draw(){
     ofSetLineWidth(3);
     
     ofBeginShape();
-    for (int i = 0; i < left.size(); i++){
-        ofVertex(i, 100 -left[i]*180.0f);
+    for (int i = 0; i < left.size()-1; i++){
+        ofVertex(i, 100 -left[i]*100.0f);
     }
     ofEndShape(false);
     
@@ -116,8 +114,8 @@ void ofApp::draw(){
     ofSetLineWidth(3);
     
     ofBeginShape();
-    for (int i = 0; i < right.size(); i++){
-        ofVertex(i, 100 -right[i]*180.0f);
+    for (int i = 0; i < right.size()-1; i++){
+        ofVertex(i, 100 -right[i]*100.0f);
     }
     ofEndShape(false);
     
@@ -139,6 +137,11 @@ void ofApp::draw(){
     } else {
         ofDrawBitmapString("serial connection failed.", 576, 120);
     }
+    
+    
+    // Display amp value
+    ofDrawBitmapString("'+' Volume up / '-' Volume down", 576, 140);
+    ofDrawBitmapString("Record volume: " + ofToString(amp), 576, 150);
 
 }
 
@@ -147,18 +150,20 @@ void ofApp::audioIn(float * input, int bufferSize, int nChannels){
     
     //lets go through each sample and calculate the root mean square which is a rough way to calculate volume
     for (int i = 0; i < bufferSize; i++){
-//        left[i] = input[i];
-        		left[i]		= input[i]*wave_height;
-        		right[i]	= input[i+1]*wave_height;
+        		left[i]		= input[i]*amp;
+        		right[i]	= input[i+1]*amp;
     }
+
+//    cout << "BEFORE" << *input << endl;
     
+    // Record volume control with variable 'amp'
+    for (int i = 0; i < bufferSize; i++){
+        float ft = input[i] * amp;
+        input[i] = ft;
+    }
+
     
-    
-//    float ft = (*input) * input_volume;
-//    
-//    ampedInput = &ft;
-//    
-//    cout << *input << " / " << *ampedInput << endl;
+//    cout << "AFTER" << *input << endl;
     
     if(recording)
     {
@@ -263,6 +268,16 @@ void ofApp::keyPressed(int key){
         cout << ofGetElapsedTimef() << "\n";
     else if (key == 'r')
         ofResetElapsedTimeCounter();
+    else if (key == '+' || key == '=') {
+        amp+=0.1;
+        amp = min(2.0f, amp);
+    }
+    else if (key == '-' || key == '_') {
+        amp-=0.1;
+        amp = max(0.0f, amp);
+    }
+    
+
 }
 
 //--------------------------------------------------------------

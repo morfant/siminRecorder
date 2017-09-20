@@ -49,10 +49,9 @@ class ofApp : public ofBaseApp{
         string getFilename(bool newFile=true);
         int numOfVoice;
         string lasttime;
-        float wave_height = 0.0f;
-    float * ampedInput;
     
-    float CALLING_INTERVAL = 60.0 * 10; // 10 min
+        float amp = 1.0; // Record volume
+        float CALLING_INTERVAL = 60.0 * 10; // 10 min
 
 		
 };
