@@ -35,6 +35,12 @@ void ofApp::setup(){
     } else {
         serialConnected = false;
     }
+    
+    
+    //GUI
+    gui.setup("", "settings.xml", 576, sliderYpos);
+    gui.add(volumeSlider.setup("Record Volume", 1.0, 0.0, 2.0));
+    volumeSlider.loadFromFile("settings.xml");
 }
 
 //--------------------------------------------------------------
@@ -140,8 +146,11 @@ void ofApp::draw(){
     
     
     // Display amp value
-    ofDrawBitmapString("'+' Volume up / '-' Volume down", 576, 140);
-    ofDrawBitmapString("Record volume: " + ofToString(amp), 576, 150);
+//    ofDrawBitmapString("'+' Volume up / '-' Volume down", 576, 140);
+//    ofDrawBitmapString("Record volume: " + ofToString(amp), 576, 150);
+    ofDrawBitmapString("*To save setting value, Click disk icon", 576, sliderYpos - 10);
+    amp = volumeSlider;
+    gui.draw();
 
 }
 

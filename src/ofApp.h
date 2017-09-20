@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxLibsndFileRecorder.h"
+#include "ofxGui.h"
 
 #define _VOICE_PATH_    "/Users/siminrecorder/Dropbox/voices/"
 //#define _VOICE_PATH_    "/Users/giy/Dropbox/"
@@ -52,6 +53,10 @@ class ofApp : public ofBaseApp{
     
         float amp = 1.0; // Record volume
         float CALLING_INTERVAL = 60.0 * 10; // 10 min
+    
+    ofxFloatSlider volumeSlider;
+    float sliderYpos = 170;
+    ofxPanel gui;
 
 		
 };
