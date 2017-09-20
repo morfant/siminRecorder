@@ -57,6 +57,7 @@ class ofApp : public ofBaseApp{
         float CALLING_INTERVAL = 60.0 * 10; // 10 min
     
         ofxFloatSlider volumeSlider;
+        ofxFloatSlider callingIntervalSlider;
         float sliderYpos = 170;
         ofxPanel gui;
         ofFile serialConnectionResult;

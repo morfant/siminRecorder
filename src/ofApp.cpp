@@ -53,8 +53,13 @@ void ofApp::setup(){
     
     //GUI
     gui.setup("", "settings.xml", 576, sliderYpos);
+    gui.setSize(400, 200);
     gui.add(volumeSlider.setup("Record Volume", 1.0, 0.0, 2.0));
+    gui.add(callingIntervalSlider.setup("Calling Interval(min)", 10, 1, 60));
+    volumeSlider.setSize(400, 30);
+    callingIntervalSlider.setSize(400, 30);
     volumeSlider.loadFromFile("settings.xml");
+    callingIntervalSlider.loadFromFile("settings.xml");
 }
 
 //--------------------------------------------------------------
@@ -170,6 +175,7 @@ void ofApp::draw(){
     ofSetColor(255);
     ofDrawBitmapString("*To save setting value, Click disk icon", 576, sliderYpos - 10);
     amp = volumeSlider;
+    CALLING_INTERVAL = 60.0 * callingIntervalSlider;
     gui.draw();
 
 }
@@ -293,6 +299,8 @@ void ofApp::keyPressed(int key){
         beginRecording();
     else if (key == 'f' && recording)
         endRecording();
+    else if (key == 'c' && !recording)
+        calling();
     else if (key == 'a')
         cout << ofGetElapsedTimef() << "\n";
     else if (key == 'r')
