@@ -5,6 +5,8 @@ void ofApp::setup(){
     
     ofBackground(54);
     
+    
+    // Audio
     soundStream.getDeviceList();
     soundStream.setDeviceID(3);
 //    soundStream.setDeviceID(0);
@@ -16,7 +18,6 @@ void ofApp::setup(){
     volHistory.assign(400, 0.0);
     soundStream.setup(this, 0, 1, 44100, bufferSize, 4);
     
-    
     recording=false;
     
     beginMessage.load("beginningGuide.wav");
@@ -26,14 +27,27 @@ void ofApp::setup(){
     lasttime = "No one recorded yet.";
     
     
+    // Serial
     serial.listDevices();
     vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
     if (serial.setup("tty.usbmodem1431", 9600)){
         serialConnected = true;
         memset(bytesReadString, 0, 2);
         serial.flush();
+        
+//        serialConnectionResult.open(_RESULT_PATH_, ofFile::WriteOnly);
+//        serialConnectionResult << ofGetTimestampString("%Y-%m-%d %H:%M:%S");
+//        serialConnectionResult << "\n\n센서와의 시리얼 연결에 성공했습니다.";
+//        serialConnectionResult.close();
+
     } else {
         serialConnected = false;
+        
+        // serial connection failure notice
+        serialConnectionResult.open(_RESULT_PATH_, ofFile::WriteOnly);
+        serialConnectionResult << ofGetTimestampString("%Y-%m-%d %H:%M:%S");
+        serialConnectionResult << "\n\n센서와의 시리얼 연결에 실패했습니다. 시스템을 재부팅해 주세요.";
+        serialConnectionResult.close();
     }
     
     

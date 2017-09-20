@@ -4,7 +4,9 @@
 #include "ofxLibsndFileRecorder.h"
 #include "ofxGui.h"
 
+#define _RESULT_PATH_    "/Users/siminrecorder/Dropbox/RESULT.txt"
 #define _VOICE_PATH_    "/Users/siminrecorder/Dropbox/voices/"
+
 //#define _VOICE_PATH_    "/Users/giy/Dropbox/"
 
 class ofApp : public ofBaseApp{
@@ -51,12 +53,13 @@ class ofApp : public ofBaseApp{
         int numOfVoice;
         string lasttime;
     
-        float amp = 1.0; // Record volume
+        float amp = 0; // Record volume
         float CALLING_INTERVAL = 60.0 * 10; // 10 min
     
-    ofxFloatSlider volumeSlider;
-    float sliderYpos = 170;
-    ofxPanel gui;
+        ofxFloatSlider volumeSlider;
+        float sliderYpos = 170;
+        ofxPanel gui;
+        ofFile serialConnectionResult;
 
 		
 };
