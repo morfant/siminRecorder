@@ -35,10 +35,10 @@ void ofApp::setup(){
         memset(bytesReadString, 0, 2);
         serial.flush();
         
-//        serialConnectionResult.open(_RESULT_PATH_, ofFile::WriteOnly);
-//        serialConnectionResult << ofGetTimestampString("%Y-%m-%d %H:%M:%S");
-//        serialConnectionResult << "\n\n센서와의 시리얼 연결에 성공했습니다.";
-//        serialConnectionResult.close();
+        serialConnectionResult.open(_RESULT_PATH_, ofFile::WriteOnly);
+        serialConnectionResult << ofGetTimestampString("%Y-%m-%d %H:%M:%S");
+        serialConnectionResult << "\n\n센서와의 연결에 성공했습니다.";
+        serialConnectionResult.close();
 
     } else {
         serialConnected = false;
@@ -46,7 +46,7 @@ void ofApp::setup(){
         // serial connection failure notice
         serialConnectionResult.open(_RESULT_PATH_, ofFile::WriteOnly);
         serialConnectionResult << ofGetTimestampString("%Y-%m-%d %H:%M:%S");
-        serialConnectionResult << "\n\n센서와의 시리얼 연결에 실패했습니다. 시스템을 재부팅해 주세요.";
+        serialConnectionResult << "\n\n센서와의 연결에 실패했습니다. 연결을 확인하고 시스템을 재부팅해 주세요.";
         serialConnectionResult.close();
     }
     
@@ -142,6 +142,9 @@ void ofApp::draw(){
     ofPopMatrix();
     ofPopStyle();
     
+
+    // Text
+    ofSetColor(255);
     ofDrawBitmapString(ofGetTimestampString("%Y-%m-%d %H:%M:%S"), 576, 50);
     ofDrawBitmapString("We have "+ofToString(numOfVoice) + " voices", 576, 66);
     ofDrawBitmapString(lasttime, 576,82);
@@ -153,15 +156,18 @@ void ofApp::draw(){
     }
     
     if (serialConnected) {
+        ofSetColor(0, 255, 0);
         ofDrawBitmapString("tty.usbmodem1431 sucessfully connected.", 576, 300);
     } else {
-        ofDrawBitmapString("serial connection failed.", 576, 300);
+        ofSetColor(255, 0, 0);
+        ofDrawBitmapString("Serial connection failed.", 576, 300);
     }
     
     
     // Display amp value
 //    ofDrawBitmapString("'+' Volume up / '-' Volume down", 576, 140);
 //    ofDrawBitmapString("Record volume: " + ofToString(amp), 576, 150);
+    ofSetColor(255);
     ofDrawBitmapString("*To save setting value, Click disk icon", 576, sliderYpos - 10);
     amp = volumeSlider;
     gui.draw();
