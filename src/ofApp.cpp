@@ -5,7 +5,7 @@ void ofApp::setup(){
     
     ofBackground(54);
     
-    soundStream.listDevices();
+    soundStream.getDeviceList();
     soundStream.setDeviceID(3);
 //    soundStream.setDeviceID(0);
     
@@ -19,9 +19,9 @@ void ofApp::setup(){
     
     recording=false;
     
-    beginMessage.loadSound("beginningGuide.wav");
-    callingMessage.loadSound("callingGuide.wav");
-    endMessage.loadSound("finishingGuide.wav");
+    beginMessage.load("beginningGuide.wav");
+    callingMessage.load("callingGuide.wav");
+    endMessage.load("finishingGuide.wav");
     
     lasttime = "No one recorded yet.";
     
@@ -91,7 +91,7 @@ void ofApp::draw(){
     ofDrawBitmapString("Left Channel", 4, 18);
     
     ofSetLineWidth(1);
-    ofRect(0, 0, 512, 200);
+    ofDrawRectangle(0, 0, 512, 200);
     
     ofSetColor(245, 58, 135);
     ofSetLineWidth(3);
@@ -114,7 +114,7 @@ void ofApp::draw(){
     ofDrawBitmapString("Right Channel", 4, 18);
     
     ofSetLineWidth(1);
-    ofRect(0, 0, 512, 200);
+    ofDrawRectangle(0, 0, 512, 200);
     
     ofSetColor(245, 58, 135);
     ofSetLineWidth(3);
@@ -139,9 +139,9 @@ void ofApp::draw(){
     }
     
     if (serialConnected) {
-        ofDrawBitmapString("tty.usbmodem1431 sucessfully connected.", 576, 120);
+        ofDrawBitmapString("tty.usbmodem1431 sucessfully connected.", 576, 300);
     } else {
-        ofDrawBitmapString("serial connection failed.", 576, 120);
+        ofDrawBitmapString("serial connection failed.", 576, 300);
     }
     
     
