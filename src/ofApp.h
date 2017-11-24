@@ -4,7 +4,7 @@
 #include "ofxLibsndFileRecorder.h"
 #include "ofxGui.h"
 
-#define _RESULT_PATH_    "/Users/siminrecorder/Dropbox/RESULT.txt"
+#define _RESULT_PATH_    "/Users/siminrecorder/Dropbox/RESULT_OUTDOOR.txt"
 #define _VOICE_PATH_    "/Users/siminrecorder/Dropbox/voices/"
 
 //#define _VOICE_PATH_    "/Users/giy/Dropbox/"
