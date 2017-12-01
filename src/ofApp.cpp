@@ -66,7 +66,6 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    ofLog(OF_LOG_NOTICE, "updating...");
     
     if (serial.available() > 0) {
         char ch = serial.readByte();
