@@ -1,6 +1,5 @@
 #pragma once
 
-#include <time.h>
 #include "ofMain.h"
 #include "ofxLibsndFileRecorder.h"
 #include "ofxGui.h"
