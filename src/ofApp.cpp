@@ -3,8 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofBackground(54);
+    string logFileName = "SiminRecorder_Log_" + ofGetTimestampString() + ".txt";
+    ofLogToFile(logFileName, true);
     
+    ofBackground(54);
     
     // Audio
     soundStream.getDeviceList();
@@ -64,6 +66,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    ofLog(OF_LOG_NOTICE, "updating...");
+    
     if (serial.available() > 0) {
         char ch = serial.readByte();
         
