@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    string logFileName = "SiminRecorder_Log_" + ofGetTimestampString() + ".txt";
+    string logFileName = "log_siminrecorder_" + ofGetTimestampString("%Y%m%d_%H%M%S") + ".txt";
     ofLogToFile(logFileName, true);
     
     ofBackground(54);
